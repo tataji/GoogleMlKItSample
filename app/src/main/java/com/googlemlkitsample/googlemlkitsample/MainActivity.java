@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -80,30 +81,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         FirebaseApp.initializeApp(getApplicationContext());
-        FirebaseVisionFaceDetectorOptions options =
-                new FirebaseVisionFaceDetectorOptions.Builder()
-                        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-                        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-                        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-                        .setMinFaceSize(0.15f)
-                        .setTrackingEnabled(true)
-                        .build();
-         detector = FirebaseVision.getInstance()
-                .getVisionFaceDetector(options);
 
 
-//        int rotation = 0;
-//        try {
-//            rotation = getRotationCompensation("", MainActivity.this, getApplicationContext());
-//        } catch (CameraAccessException e) {
-//            e.printStackTrace();
-//        }
-//        FirebaseVisionImageMetadata metadata = new FirebaseVisionImageMetadata.Builder()
-//                .setWidth(1280)
-//                .setHeight(720)
-//                .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)
-//                .setRotation(rotation)
-//                .build();
+
     }
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -160,6 +140,19 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mediaImage_path);
         // start the image capture Intent
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+//        int rotation = 0;
+//        try {
+//
+//            rotation = getRotationCompensation(String.valueOf(CAMERA_CAPTURE_IMAGE_REQUEST_CODE), MainActivity.this, getApplicationContext());
+//        } catch (CameraAccessException e) {
+//            e.printStackTrace();
+//        }
+//        FirebaseVisionImageMetadata metadata = new FirebaseVisionImageMetadata.Builder()
+//                .setWidth(1280)
+//                .setHeight(720)
+//                .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)
+//                .setRotation(rotation)
+//                .build();
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -235,6 +228,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void GetFaceOnImage(){
+
+        FirebaseVisionFaceDetectorOptions options =
+                new FirebaseVisionFaceDetectorOptions.Builder()
+                        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
+                        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                        .setMinFaceSize(0.15f)
+                        .setTrackingEnabled(true)
+                        .build();
+        detector = FirebaseVision.getInstance()
+                .getVisionFaceDetector(options);
         try {
             image = FirebaseVisionImage.fromFilePath(getApplicationContext(), mediaImage_path);
         } catch (IOException e) {
