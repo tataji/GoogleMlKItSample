@@ -81,6 +81,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         FirebaseApp.initializeApp(getApplicationContext());
+        FirebaseVisionFaceDetectorOptions options =
+                new FirebaseVisionFaceDetectorOptions.Builder()
+                        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
+                        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                        .setMinFaceSize(0.15f)
+                        .setTrackingEnabled(true)
+                        .build();
+        detector = FirebaseVision.getInstance()
+                .getVisionFaceDetector(options);
+        try {
+            image = FirebaseVisionImage.fromFilePath(getApplicationContext(), mediaImage_path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -229,21 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void GetFaceOnImage(){
 
-        FirebaseVisionFaceDetectorOptions options =
-                new FirebaseVisionFaceDetectorOptions.Builder()
-                        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-                        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-                        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-                        .setMinFaceSize(0.15f)
-                        .setTrackingEnabled(true)
-                        .build();
-        detector = FirebaseVision.getInstance()
-                .getVisionFaceDetector(options);
-        try {
-            image = FirebaseVisionImage.fromFilePath(getApplicationContext(), mediaImage_path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         Task<List<FirebaseVisionFace>> result =
                 detector.detectInImage(image)
                         .addOnSuccessListener(
